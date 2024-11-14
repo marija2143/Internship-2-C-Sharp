@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 namespace dr_2_dumpint_mk
 {
     class Program
@@ -35,15 +35,14 @@ namespace dr_2_dumpint_mk
             }
             return first_choice;
         }
-        //napravit fju za ...
-        static string Check_SubMenu()
+        static string Check_SubMenu(string[] letter_opt)
         {
             bool incorrectInput = true;
             string first_choice = "";
 
             while (incorrectInput)
             {
-                Console.WriteLine("Unesite broj: ");
+                Console.WriteLine("Unesite slovo: ");
                 var _choice = Console.ReadLine();
                 int b;
                 var check_num = int.TryParse(_choice, out b); 
@@ -51,14 +50,25 @@ namespace dr_2_dumpint_mk
                 {
                     if (check_num ||_choice.Length>1)
                     {
-                        var ex1 = new Exception("Neispravan unos, nije slovo");
+                        var ex1 = new Exception("Neispravan unos, nije jedno slovo");
                         throw ex1;
                     }
-                    //if (first_choice < 1 || first_choice > biggest_option)
-                    //{
-                    //    var ex2 = new Exception("Neispravan unos, odabir van ponuđenih");
-                    //    throw ex2;
-                    //}
+
+                    bool inArray = false;
+                    for (int i = 0; i < letter_opt.Length; i++)
+                    {
+                        if (letter_opt[i].ToLower()==_choice.ToLower())
+                        {
+                            inArray = true;
+                        }
+                    }
+                    if (inArray!=true)
+                    {
+                        var ex1 = new Exception("Neispravan unos, nije ponudeno slovo");
+                        throw ex1;
+                    }
+
+                    first_choice = _choice;
                     incorrectInput = false;
                 }
                 catch (Exception e)
@@ -68,6 +78,74 @@ namespace dr_2_dumpint_mk
             }
             return first_choice;
         }
+
+        static string User_Function_1()
+        {
+            //Add user
+            StreamReader sr = new StreamReader("");
+            StreamWriter sw = new StreamWriter("");
+            return "";
+        }
+        static string User_Function_2(string option_)
+        {
+            //Delete user: a) by id, b) by first and last name
+            StreamReader sr = new StreamReader("");
+            StreamWriter sw = new StreamWriter("");
+            return "";
+        }
+        static string User_Function_3()
+        {
+            //Update user by id
+            StreamReader sr = new StreamReader("");
+            StreamWriter sw = new StreamWriter("");
+            return "";
+        }
+        static string User_Function_4(string option_)
+        {
+            //Show users: a) aplhabetically by last name , b) over 30 y.o. , c) in debt
+            StreamReader sr = new StreamReader("");
+            return "";
+        }
+
+        static string Account_Function_1(string option_)
+        {
+            //Insert transaction: a) current time , b) past time
+            StreamReader sr = new StreamReader("");
+            StreamWriter sw = new StreamWriter("");
+            return "";
+        }
+        static string Account_Function_2(string option_)
+        {
+            //Delete transaction: a) by id , b) under amount , c) over amount , d) all revenues ,
+            //e) all expenses , f) all transactions in category
+            StreamReader sr = new StreamReader("");
+            StreamWriter sw = new StreamWriter("");
+            return "";
+        }
+        static string Account_Function_3()
+        {
+            //Edit transaction by id
+            StreamReader sr = new StreamReader("");
+            StreamWriter sw = new StreamWriter("");
+            return "";
+        }
+        static string Account_Function_4(string option_)
+        {
+            //View transactions: a) as occured ,  b) sorted upward by amount , c) sorted downward by amount ,
+            //d) sorted alphabetically by desctiption , e) sorted upward by date , f) sorted downward by date ,
+            //g) all revenues , h) all expenses , i) for given category (all) , j) for given type and category (all)
+            StreamReader sr = new StreamReader("");
+            return "";
+        }
+        static string Account_Function_5(string option_)
+        {
+            //Financial report: a) current account status , b) number of total transactions ,
+            //c) total for revenur+es and expenses by month and year , d) percentage of expenses for category ,
+            //e) avg transaction amount for month and year , f) avg transaction amount for category
+            StreamReader sr = new StreamReader("");
+            return "";
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine(" 1 - Korisnici \n 2 - Računi \n 3 - Izlaz iz aplikacije ");
@@ -130,13 +208,40 @@ namespace dr_2_dumpint_mk
                     Console.WriteLine(options_menu1[0]);
                     var choice_user=Check_Menu(user_options_num);
                     var sub_choice_user = "";
-                    if (choice_user % 2 == 0)
+                    if (choice_user == 2)
                     {
-                        Console.WriteLine(sub_options_menu_user[choice_user - 2]);
-
-                        //check sub menu
+                        Console.WriteLine(sub_options_menu_user[0]);
                     }
-                    //posalji izbor u funkciju koja ce izvrsavat odabrano (switch)
+                    else if (choice_user == 4)
+                    {
+                        Console.WriteLine(sub_options_menu_user[1]);
+                    }
+                    switch (choice_user)
+                    {
+                        case 1:
+                            User_Function_1();
+                            break;
+
+                        case 2:
+                            string[] sub_opt2_user = { "a", "b" };
+                            sub_choice_user = Check_SubMenu(sub_opt2_user);
+
+                            User_Function_2(sub_choice_user);
+                            break;
+
+                        case 3:
+                            User_Function_3();
+                            break;
+
+                        case 4:
+                            string[] sub_opt4_user = { "a", "b", "c" };
+                            sub_choice_user = Check_SubMenu(sub_opt4_user);
+
+                            User_Function_4(sub_choice_user);
+                            break;
+
+                        default: Console.WriteLine("Nesto je poslo po krivu"); break;
+                    }
                     break;
 
                 case 2:
@@ -146,9 +251,43 @@ namespace dr_2_dumpint_mk
                     if (choice_acc!=3)
                     {
                         Console.WriteLine(sub_options_menu_account[choice_acc - 1]);
-                        //check sub menu
                     }
-                    //posalji izbor u funkciju koja ce izvrsavat odabrano (switch)
+                    switch (choice_acc)
+                    {
+                        case 1:
+                            string[] sub_opt1_acc = { "a", "b" };
+                            sub_choice_acc = Check_SubMenu(sub_opt1_acc);
+
+                            Account_Function_1(sub_choice_acc);
+                            break;
+
+                        case 2:
+                            string[] sub_opt2_acc = { "a", "b", "c", "d", "e", "f" };
+                            sub_choice_acc = Check_SubMenu(sub_opt2_acc);
+
+                            Account_Function_2(sub_choice_acc);
+                            break;
+
+                        case 3:
+                            Account_Function_3();
+                            break;
+
+                        case 4:
+                            string[] sub_opt4_acc = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" };
+                            sub_choice_acc = Check_SubMenu(sub_opt4_acc);
+
+                            Account_Function_4(sub_choice_acc);
+                            break;
+
+                        case 5:
+                            string[] sub_opt5_acc = { "a", "b", "c", "d", "e", "f" };
+                            sub_choice_acc = Check_SubMenu(sub_opt5_acc);
+
+                            Account_Function_5(sub_choice_acc);
+                            break;
+
+                        default: Console.WriteLine("Nesto je poslo po krivu"); break;
+                    }
                     break;
 
                 case 3:;
