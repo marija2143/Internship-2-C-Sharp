@@ -1661,17 +1661,86 @@ namespace dr_2_dumpint_mk
                     Console.WriteLine(e.Message);
                 }
             }
-
-            using (StreamWriter sw = new StreamWriter("transactionbase.txt"))
+            switch (option_)
             {
-                foreach (var item in dict)
-                {
-                    foreach (var list_item in item.Value)
+                case "a":
+                    float status=0;
+                    foreach (var item in dict[id_])
                     {
-                        var write = "[" + list_item + "];";
-                        sw.WriteLine(write);
+                        var split = item.Split("\\");
+                        if (split[4]=="prihod")
+                        {
+                            status += float.Parse(split[2]);
+                        }
+                        if(split[4] == "rashod")
+                        {
+                            status -= float.Parse(split[2]);
+                        }
                     }
-                }
+                    Console.WriteLine("Status: "+ status);
+                    if (status<0)
+                    {
+                        Console.WriteLine("U minusu ste!");
+                    }
+                    break;
+                case "b":
+                    Console.WriteLine("Broj transakcija: " + dict[id_].Count);
+                    break;
+                case "c":
+                    Console.Write("c test");
+                    break;
+                case "d":
+                    var all_t = dict[id_].Count;
+                    string[] cats={ "placa", "honorar", "poklon", "hrana", "prijevoz", "sport" };
+                    var cats_ =new List<string>(cats);
+                    int[] show_up = { 0, 0, 0, 0, 0, 0 };
+                    foreach (var item in dict[id_])
+                    {
+                        if (cats.Contains(item.Split("\\")[5]))
+                        {
+                            var temp=cats_.IndexOf(item.Split("\\")[5]);
+                            show_up[temp] += 1;
+                        }
+                    }
+                    Console.WriteLine("Postotak transakcija po kategorijama: ");
+                    for (int i = 0; i < cats.Length; i++)
+                    {
+                        var perc = (double)show_up[i] / (double)all_t;
+                        Console.WriteLine(cats[i] +" -> "+perc*100+"%");
+                    }
+                    break;
+                case "e":
+                    Console.WriteLine("e test");
+                    break;
+                case "f":
+                    string[] cats_again = { "placa", "honorar", "poklon", "hrana", "prijevoz", "sport" };
+                    cats_ = new List<string>(cats_again);
+                    Console.Write("e test");
+                    double[] sum_per_cat = { 0, 0, 0, 0, 0, 0 };
+                    double[] trans_per_cat = { 0, 0, 0, 0, 0, 0 };
+                    foreach (var item in dict[id_])
+                    {
+                        if (cats_again.Contains(item.Split("\\")[5]))
+                        {
+                            var temp = cats_.IndexOf(item.Split("\\")[5]);
+                            sum_per_cat[temp] += double.Parse(item.Split("\\")[2]);
+                            trans_per_cat[temp] += 1;
+                        }
+                    }
+                    Console.WriteLine("Postotak transakcija po kategorijama: ");
+                    for (int i = 0; i < cats_again.Length; i++)
+                    {
+                        double perc;
+                        if (trans_per_cat[i]==0)
+                        {
+                            perc = 0;
+                        }
+                        else perc = sum_per_cat[i] / trans_per_cat[i]; 
+                        Console.WriteLine(cats_again[i] + " -> " + perc + " eura");
+                    }
+                    break;
+                default:
+                    break;
             }
             Console.WriteLine("Pritisnite bilo koju tipku za nastavak.");
             Console.ReadKey(); //buffer
